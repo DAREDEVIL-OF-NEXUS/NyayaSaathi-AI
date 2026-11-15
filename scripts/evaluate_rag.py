@@ -94,17 +94,20 @@ def evaluate_crag_and_generation(
         decision = res.crag_metadata.get("decision", "SUFFICIENT")
         crag_decisions[decision] = crag_decisions.get(decision, 0) + 1
 
-        if res.verification_metadata:
-            prec = res.verification_metadata.get("citation_precision", 1.0)
-            citation_precisions.append(prec)
+        if res.citations and res.verification_metadata:
+            prec = res.verification_metadata.get("citation_precision")
+            if prec is not None:
+                citation_precisions.append(prec)
 
         if "disclaimer" in res.disclaimer.lower() or "statutory" in res.disclaimer.lower():
             disclaimers_present += 1
 
+    avg_prec = round(sum(citation_precisions) / len(citation_precisions), 4) if citation_precisions else None
+
     return {
         "samples_evaluated": total_evaluated,
         "crag_decisions": crag_decisions,
-        "avg_citation_precision": round(sum(citation_precisions) / len(citation_precisions), 4) if citation_precisions else 1.0,
+        "avg_citation_precision": avg_prec,
         "statutory_disclaimer_compliance": round(disclaimers_present / total_evaluated, 4) if total_evaluated else 1.0
     }
 
@@ -147,6 +150,17 @@ def generate_markdown_report(
             f"{r['recall_at_10']*100:.1f}% | {r['mrr']:.4f} | {r['category_accuracy']*100:.1f}% | {r['avg_latency_ms']} ms |"
         )
 
+    citation_prec_str = (
+        f"{gen_results['avg_citation_precision']*100:.1f}%"
+        if gen_results['avg_citation_precision'] is not None
+        else "N/A (No cited responses in sample)"
+    )
+    citation_gate_status = (
+        "PASSED"
+        if (gen_results['avg_citation_precision'] is not None and gen_results['avg_citation_precision'] >= 0.80)
+        else ("N/A" if gen_results['avg_citation_precision'] is None else "REVIEW")
+    )
+
     md.extend([
         "",
         "---",
@@ -155,7 +169,7 @@ def generate_markdown_report(
         "",
         f"- **Queries Sampled for Generation:** {gen_results['samples_evaluated']}",
         f"- **CRAG Outcomes:** `SUFFICIENT`: {gen_results['crag_decisions'].get('SUFFICIENT', 0)}, `PARTIALLY_SUFFICIENT`: {gen_results['crag_decisions'].get('PARTIALLY_SUFFICIENT', 0)}, `INSUFFICIENT`: {gen_results['crag_decisions'].get('INSUFFICIENT', 0)}",
-        f"- **Average Citation Precision:** {gen_results['avg_citation_precision']*100:.1f}%",
+        f"- **Average Citation Precision:** {citation_prec_str}",
         f"- **Statutory Disclaimer Enforcement:** {gen_results['statutory_disclaimer_compliance']*100:.1f}%",
         "",
         "---",
@@ -176,7 +190,7 @@ def generate_markdown_report(
         "| :--- | :---: | :---: | :---: |",
         f"| Hybrid Recall@5 | $\\ge 75.0\\%$ | {retrieval_results[2]['recall_at_5']*100:.1f}% | {'PASSED' if retrieval_results[2]['recall_at_5'] >= 0.75 else 'REVIEW'} |",
         f"| Mean Reciprocal Rank (MRR) | $\\ge 0.50$ | {retrieval_results[2]['mrr']:.4f} | {'PASSED' if retrieval_results[2]['mrr'] >= 0.50 else 'REVIEW'} |",
-        f"| Citation Precision | $\\ge 80.0\\%$ | {gen_results['avg_citation_precision']*100:.1f}% | {'PASSED' if gen_results['avg_citation_precision'] >= 0.80 else 'REVIEW'} |",
+        f"| Citation Precision | $\\ge 80.0\\%$ | {citation_prec_str} | {citation_gate_status} |",
         f"| Mandatory Disclaimer Compliance | $100.0\\%$ | {gen_results['statutory_disclaimer_compliance']*100:.1f}% | {'PASSED' if gen_results['statutory_disclaimer_compliance'] == 1.0 else 'REVIEW'} |",
         ""
     ])

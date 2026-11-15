@@ -1,6 +1,6 @@
 # NyayaSaathi AI — Empirical RAG Evaluation & Benchmarking Report
 
-**Date Generated:** 2026-11-15 12:12:21 UTC  
+**Date Generated:** 2026-11-15 13:15:35 UTC  
 **Embedding Model:** `intfloat/multilingual-e5-small`  
 **Fusion Method:** Reciprocal Rank Fusion (RRF, $k=60$)  
 **Knowledge Graph:** NetworkX Bounded Traversal ($hops=1$)  
@@ -23,10 +23,10 @@ This evaluation benchmarks the NyayaSaathi AI Retrieval-Augmented Generation pip
 
 | Retrieval Strategy | Recall@3 | Recall@5 | Recall@10 | MRR | Category Match | Avg Latency (ms) |
 | :--- | :---: | :---: | :---: | :---: | :---: | :---: |
-| **VECTOR_ONLY** | 86.7% | 93.3% | 100.0% | 0.8430 | 73.3% | 81.9 ms |
-| **BM25_ONLY** | 73.3% | 86.7% | 86.7% | 0.6889 | 53.3% | 6.83 ms |
-| **HYBRID** | 100.0% | 100.0% | 100.0% | 0.8778 | 73.3% | 161.31 ms |
-| **HYBRID_GRAPH** | 100.0% | 100.0% | 100.0% | 0.8778 | 73.3% | 193.77 ms |
+| **VECTOR_ONLY** | 67.3% | 73.1% | 78.8% | 0.6404 | 32.7% | 481.55 ms |
+| **BM25_ONLY** | 75.0% | 75.0% | 78.8% | 0.6330 | 23.1% | 3.25 ms |
+| **HYBRID** | 76.9% | 78.8% | 78.8% | 0.7067 | 34.6% | 29.37 ms |
+| **HYBRID_GRAPH** | 76.9% | 78.8% | 78.8% | 0.7067 | 34.6% | 28.13 ms |
 
 ---
 
@@ -53,7 +53,7 @@ Graph traversal adds 1-hop semantic enrichment: when a candidate chunk citing *R
 
 | Quality Gate | Threshold | Achieved | Status |
 | :--- | :---: | :---: | :---: |
-| Hybrid Recall@5 | $\ge 75.0\%$ | 100.0% | PASSED |
-| Mean Reciprocal Rank (MRR) | $\ge 0.50$ | 0.8778 | PASSED |
+| Hybrid Recall@5 | $\ge 75.0\%$ | 78.8% | PASSED |
+| Mean Reciprocal Rank (MRR) | $\ge 0.50$ | 0.7067 | PASSED |
 | Citation Precision | $\ge 80.0\%$ | 100.0% | PASSED |
 | Mandatory Disclaimer Compliance | $100.0\%$ | 100.0% | PASSED |
