@@ -14,6 +14,17 @@ import {
 
 const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api/v1";
 
+export function getAuthHeaders(extraHeaders: Record<string, string> = {}): Record<string, string> {
+  const headers: Record<string, string> = { ...extraHeaders };
+  if (typeof window !== "undefined") {
+    const token = localStorage.getItem("nyayasaathi_token");
+    if (token) {
+      headers["Authorization"] = `Bearer ${token}`;
+    }
+  }
+  return headers;
+}
+
 export async function checkBackendHealth(): Promise<{ status: string }> {
   const res = await fetch("http://localhost:8000/health", { cache: "no-store" });
   if (!res.ok) throw new Error("Backend unavailable");
@@ -24,7 +35,7 @@ export async function checkBackendHealth(): Promise<{ status: string }> {
 export async function sendChatQuery(req: ChatRequest): Promise<ChatResponse> {
   const res = await fetch(`${API_BASE}/chat`, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: getAuthHeaders({ "Content-Type": "application/json" }),
     body: JSON.stringify(req),
   });
   if (!res.ok) {
@@ -44,7 +55,7 @@ export async function streamChatQuery(
   try {
     const res = await fetch(`${API_BASE}/chat/stream`, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: getAuthHeaders({ "Content-Type": "application/json" }),
       body: JSON.stringify(req),
     });
 
@@ -88,26 +99,35 @@ export async function streamChatQuery(
 }
 
 export async function listConversations(): Promise<ConversationSummary[]> {
-  const res = await fetch(`${API_BASE}/conversations`, { cache: "no-store" });
+  const res = await fetch(`${API_BASE}/conversations`, {
+    headers: getAuthHeaders(),
+    cache: "no-store",
+  });
   if (!res.ok) throw new Error("Failed to load conversations");
   return res.json();
 }
 
 export async function getConversationMessages(conversationId: string): Promise<MessageItem[]> {
-  const res = await fetch(`${API_BASE}/conversations/${conversationId}`, { cache: "no-store" });
+  const res = await fetch(`${API_BASE}/conversations/${conversationId}`, {
+    headers: getAuthHeaders(),
+    cache: "no-store",
+  });
   if (!res.ok) throw new Error("Failed to load messages");
   return res.json();
 }
 
 export async function deleteConversation(conversationId: string): Promise<void> {
-  const res = await fetch(`${API_BASE}/conversations/${conversationId}`, { method: "DELETE" });
+  const res = await fetch(`${API_BASE}/conversations/${conversationId}`, {
+    method: "DELETE",
+    headers: getAuthHeaders(),
+  });
   if (!res.ok) throw new Error("Failed to delete conversation");
 }
 
 export async function submitMessageFeedback(messageId: string, rating: number, feedbackText?: string): Promise<void> {
   await fetch(`${API_BASE}/messages/${messageId}/feedback`, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: getAuthHeaders({ "Content-Type": "application/json" }),
     body: JSON.stringify({ rating, feedback_text: feedbackText }),
   });
 }
@@ -120,7 +140,7 @@ export async function classifyComplaint(data: {
 }): Promise<ComplaintClassification> {
   const res = await fetch(`${API_BASE}/complaints/classify`, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: getAuthHeaders({ "Content-Type": "application/json" }),
     body: JSON.stringify(data),
   });
   if (!res.ok) throw new Error("Grievance classification failed");
@@ -130,7 +150,7 @@ export async function classifyComplaint(data: {
 export async function generateComplaintDraft(req: ComplaintDraftRequest): Promise<ComplaintDraftResponse> {
   const res = await fetch(`${API_BASE}/complaints/draft`, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: getAuthHeaders({ "Content-Type": "application/json" }),
     body: JSON.stringify(req),
   });
   if (!res.ok) throw new Error("Complaint drafting failed");
@@ -138,13 +158,19 @@ export async function generateComplaintDraft(req: ComplaintDraftRequest): Promis
 }
 
 export async function listComplaints(): Promise<ComplaintDraftResponse[]> {
-  const res = await fetch(`${API_BASE}/complaints`, { cache: "no-store" });
+  const res = await fetch(`${API_BASE}/complaints`, {
+    headers: getAuthHeaders(),
+    cache: "no-store",
+  });
   if (!res.ok) throw new Error("Failed to list complaints");
   return res.json();
 }
 
 export async function getComplaint(id: string): Promise<ComplaintDraftResponse> {
-  const res = await fetch(`${API_BASE}/complaints/${id}`, { cache: "no-store" });
+  const res = await fetch(`${API_BASE}/complaints/${id}`, {
+    headers: getAuthHeaders(),
+    cache: "no-store",
+  });
   if (!res.ok) throw new Error("Failed to load complaint");
   return res.json();
 }
@@ -159,6 +185,7 @@ export async function uploadDocument(file: File): Promise<DocumentAnalysisRespon
   formData.append("file", file);
   const res = await fetch(`${API_BASE}/documents/upload`, {
     method: "POST",
+    headers: getAuthHeaders(),
     body: formData,
   });
   if (!res.ok) {
@@ -171,7 +198,7 @@ export async function uploadDocument(file: File): Promise<DocumentAnalysisRespon
 export async function analyzeTextDirect(text: string, filename?: string): Promise<DocumentAnalysisResponse> {
   const res = await fetch(`${API_BASE}/documents/analyze`, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: getAuthHeaders({ "Content-Type": "application/json" }),
     body: JSON.stringify({ text, filename }),
   });
   if (!res.ok) throw new Error("Direct text analysis failed");
@@ -179,7 +206,10 @@ export async function analyzeTextDirect(text: string, filename?: string): Promis
 }
 
 export async function listDocuments(): Promise<any[]> {
-  const res = await fetch(`${API_BASE}/documents`, { cache: "no-store" });
+  const res = await fetch(`${API_BASE}/documents`, {
+    headers: getAuthHeaders(),
+    cache: "no-store",
+  });
   if (!res.ok) throw new Error("Failed to list documents");
   return res.json();
 }

@@ -34,6 +34,7 @@ import {
   StructuredLegalResponse,
   ChatRequest
 } from "../types";
+import { FormattedLegalResponse } from "./FormattedLegalResponse";
 
 export const ChatInterface: React.FC = () => {
   const [conversations, setConversations] = useState<ConversationSummary[]>([]);
@@ -326,9 +327,11 @@ export const ChatInterface: React.FC = () => {
                       </div>
                     )}
 
-                    {/* Summary */}
-                    <div className="text-sm text-slate-200 leading-relaxed font-normal">
-                      {msg.structured_data?.summary || msg.content}
+                    {/* Formatted Legal Output */}
+                    <div className="pt-1">
+                      <FormattedLegalResponse
+                        content={msg.structured_data?.summary || msg.content}
+                      />
                     </div>
 
                     {/* Applicable Statutory Provisions */}
