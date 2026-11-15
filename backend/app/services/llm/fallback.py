@@ -7,6 +7,41 @@ from backend.app.services.llm.openrouter import OpenRouterClient
 
 logger = logging.getLogger(__name__)
 
+DEFAULT_MOCK_LEGAL_JSON = {
+    "summary": "According to the Consumer Protection Act, 2019 and E-Commerce Rules, 2020, consumers have statutory remedies against defective products and deficient services.",
+    "applicable_laws": [
+        {
+            "act_or_regulation": "Consumer Protection (E-Commerce) Rules, 2020",
+            "section_or_rule": "Rule 4 & 5",
+            "provision_title": "Duties of e-commerce entities",
+            "summary_of_relevance": "Mandates transparent return and refund policies for e-commerce entities."
+        }
+    ],
+    "consumer_rights": ["Right to be protected against unfair trade practices", "Right to seek redressal"],
+    "recommended_steps": [
+        "Lodge an official grievance on National Consumer Helpline (NCH) portal or call 1915.",
+        "Issue a formal legal notice to the opposite party demanding resolution within 15 days.",
+        "File a consumer complaint on e-Daakhil / e-Jagriti portal if unresolved."
+    ],
+    "appropriate_forums": [
+        {
+            "forum_name": "District Consumer Disputes Redressal Commission",
+            "pecuniary_jurisdiction": "Up to Rs 50,00,000",
+            "filing_procedure": "File via e-Daakhil portal or submit physical complaint under Section 35.",
+            "official_portal_or_contact": "https://edaakhil.nic.in"
+        }
+    ],
+    "required_documents": [
+        "Invoice / receipt of transaction",
+        "Order confirmation and payment proof",
+        "Correspondence with seller / merchant"
+    ],
+    "statutory_timelines": [
+        "Limitation period of 2 years from date of cause of action (Section 69, CPA 2019)"
+    ],
+    "disclaimer": "This information is generated for educational purposes and does not constitute formal legal representation."
+}
+
 class MockLLMClient(BaseLLMClient):
     """
     Hermetic Mock LLM for offline testing and deterministic verification.
@@ -14,7 +49,7 @@ class MockLLMClient(BaseLLMClient):
 
     def __init__(self, canned_response: Optional[str] = None, canned_json: Optional[Dict[str, Any]] = None):
         self.canned_response = canned_response or "This is a deterministic mock response from NyayaSaathi AI."
-        self.canned_json = canned_json or {"status": "success", "mock": True}
+        self.canned_json = canned_json or DEFAULT_MOCK_LEGAL_JSON
 
     def generate(
         self,
@@ -113,6 +148,17 @@ class ResilientLLMManager:
                 max_tokens=max_tokens
             )
         except Exception as fallback_err:
+            if settings.APP_ENV in ["test", "development"] and (
+                "not configured" in str(primary_err).lower() or "placeholder" in str(primary_err).lower()
+            ) and (
+                "not configured" in str(fallback_err).lower() or "placeholder" in str(fallback_err).lower()
+            ):
+                logger.warning(
+                    "[ResilientLLMManager] Both primary and fallback keys unconfigured in dev/test environment. "
+                    "Serving safe fallback mock response."
+                )
+                return MockLLMClient().generate(prompt, system_prompt, json_mode, temperature, max_tokens)
+
             raise RuntimeError(
                 f"All LLM providers failed. Primary ('{self.primary_name}') error: {primary_err}; "
                 f"Fallback ('{self.fallback_name}') error: {fallback_err}"
@@ -154,6 +200,17 @@ class ResilientLLMManager:
                 max_tokens=max_tokens
             )
         except Exception as fallback_err:
+            if settings.APP_ENV in ["test", "development"] and (
+                "not configured" in str(primary_err).lower() or "placeholder" in str(primary_err).lower()
+            ) and (
+                "not configured" in str(fallback_err).lower() or "placeholder" in str(fallback_err).lower()
+            ):
+                logger.warning(
+                    "[ResilientLLMManager] Both primary and fallback keys unconfigured in dev/test environment. "
+                    "Serving safe async fallback mock response."
+                )
+                return await MockLLMClient().generate_async(prompt, system_prompt, json_mode, temperature, max_tokens)
+
             raise RuntimeError(
                 f"All LLM providers failed. Primary ('{self.primary_name}') async error: {primary_err}; "
                 f"Fallback ('{self.fallback_name}') async error: {fallback_err}"

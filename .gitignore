@@ -61,3 +61,5 @@ desktop.ini
 
 # Data artifacts
 *.pkl
+data/uploads/*
+!data/uploads/.gitkeep
