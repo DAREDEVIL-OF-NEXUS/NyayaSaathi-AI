@@ -33,36 +33,42 @@ class RetrievedCandidate:
     metadata: Dict[str, Any] = field(default_factory=dict)
     graph_context: List[GraphEnrichedContext] = field(default_factory=list)
 
+_shared_qdrant_client = None
+
+def get_shared_qdrant_client() -> QdrantClient:
+    global _shared_qdrant_client
+    if _shared_qdrant_client is None:
+        if settings.QDRANT_URL and settings.QDRANT_URL.startswith("http"):
+            try:
+                c = QdrantClient(
+                    url=settings.QDRANT_URL,
+                    api_key=settings.QDRANT_API_KEY or None,
+                    timeout=1.0
+                )
+                c.get_collections()
+                print(f"[QdrantVectorStore] Connected to remote Qdrant at {settings.QDRANT_URL}")
+                _shared_qdrant_client = c
+            except Exception as e:
+                print(f"[QdrantVectorStore] Remote Qdrant unreachable ({e}). Falling back to embedded local storage.")
+                os.makedirs(settings.QDRANT_STORAGE_PATH, exist_ok=True)
+                _shared_qdrant_client = QdrantClient(path=settings.QDRANT_STORAGE_PATH)
+        else:
+            os.makedirs(settings.QDRANT_STORAGE_PATH, exist_ok=True)
+            _shared_qdrant_client = QdrantClient(path=settings.QDRANT_STORAGE_PATH)
+            print(f"[QdrantVectorStore] Using local embedded storage at {settings.QDRANT_STORAGE_PATH}")
+    return _shared_qdrant_client
+
 class QdrantVectorStore:
     """
     Qdrant vector database client. Supports remote server (Docker)
     with seamless local embedded disk storage fallback (./data/qdrant_db).
+    Uses a singleton client to avoid Windows file lock contention on .lock.
     """
 
     def __init__(self):
         self.collection_name = settings.QDRANT_COLLECTION_NAME
         self.dim = settings.EMBEDDING_DIMENSION
-
-        # Connect to remote Qdrant or initialize local embedded storage
-        if settings.QDRANT_URL and settings.QDRANT_URL.startswith("http"):
-            try:
-                self.client = QdrantClient(
-                    url=settings.QDRANT_URL,
-                    api_key=settings.QDRANT_API_KEY or None,
-                    timeout=5.0
-                )
-                # Test connection
-                self.client.get_collections()
-                print(f"[QdrantVectorStore] Connected to remote Qdrant at {settings.QDRANT_URL}")
-            except Exception as e:
-                print(f"[QdrantVectorStore] Remote Qdrant unreachable ({e}). Falling back to embedded local storage.")
-                os.makedirs(settings.QDRANT_STORAGE_PATH, exist_ok=True)
-                self.client = QdrantClient(path=settings.QDRANT_STORAGE_PATH)
-        else:
-            os.makedirs(settings.QDRANT_STORAGE_PATH, exist_ok=True)
-            self.client = QdrantClient(path=settings.QDRANT_STORAGE_PATH)
-            print(f"[QdrantVectorStore] Using local embedded storage at {settings.QDRANT_STORAGE_PATH}")
-
+        self.client = get_shared_qdrant_client()
         self._ensure_collection()
 
     def _ensure_collection(self):
@@ -379,6 +385,11 @@ class HybridRetriever:
 
         return fused_cands
 
-# Global accessor
+# Global accessor with singleton pattern
+_shared_hybrid_retriever = None
+
 def get_hybrid_retriever() -> HybridRetriever:
-    return HybridRetriever()
+    global _shared_hybrid_retriever
+    if _shared_hybrid_retriever is None:
+        _shared_hybrid_retriever = HybridRetriever()
+    return _shared_hybrid_retriever

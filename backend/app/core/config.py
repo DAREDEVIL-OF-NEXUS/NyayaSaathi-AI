@@ -57,4 +57,13 @@ class Settings(BaseSettings):
     OPENROUTER_MODEL: str = 'meta-llama/llama-3.1-8b-instruct:free'
     OPENROUTER_BASE_URL: str = 'https://openrouter.ai/api/v1'
 
+    # Corrective RAG (CRAG) Parameters
+    CRAG_SUFFICIENT_THRESHOLD: float = 0.65
+    CRAG_INSUFFICIENT_THRESHOLD: float = 0.35
+    CRAG_MAX_SECONDARY_RETRIEVALS: int = 1
+
+    # Reflection-Based Answer Verification Parameters
+    VERIFICATION_ENABLED: bool = True
+    MIN_CITATION_CONFIDENCE: float = 0.80
+
 settings = Settings()
