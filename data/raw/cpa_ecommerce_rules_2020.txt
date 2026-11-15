@@ -1,0 +1,34 @@
+CONSUMER PROTECTION (E-COMMERCE) RULES, 2020
+MINISTRY OF CONSUMER AFFAIRS, FOOD AND PUBLIC DISTRIBUTION
+NOTIFICATION, New Delhi, 23rd July, 2020 (G.S.R. 452(E))
+
+Rule 1. Short title and commencement: Consumer Protection (E-Commerce) Rules, 2020.
+Rule 2. Scope and applicability: applies to all goods and services bought/sold over digital network, all e-commerce models (marketplace and inventory), single and multi-channel retailers, and overseas entities systematically offering goods/services to Indian consumers.
+Rule 3. Definitions: e-commerce entity, marketplace e-commerce entity, inventory e-commerce entity, user.
+Rule 4. Mandatory duties of e-commerce entities:
+(1) Incorporated company or registered entity with resident nodal contact person.
+(2) Prominent display of legal name, principal address, website, and customer care / grievance officer contact details.
+(4) Establish adequate grievance redressal mechanism and appoint Grievance Officer with details published on website/app.
+(5) Grievance Officer must acknowledge consumer complaint within 48 hours and resolve/redress within 1 month (30 days).
+(6) No cancellation charges on consumers cancelling after purchase order unless equal charges are borne by entity for unilateral cancellation.
+(7) No price manipulation or deceptive pricing practices.
+(8) Absolute prohibition on unfair trade practices across all platforms.
+
+Rule 5. Liabilities of marketplace e-commerce entities:
+(1) Section 79 IT Act safe harbor conditioned upon compliance with intermediary guidelines.
+(2) Require sellers to display: legal name, address, customer contact, country of origin, total single-figure price with itemized delivery and tax breakdown, return/refund terms, warranty/guarantee, and grievance officer details.
+(3) Provide tracking ticket number for every registered consumer complaint.
+(4) Transparently explain ranking parameters and search algorithm determinants.
+
+Rule 6. Duties of sellers on marketplace:
+(1) No unfair trade practices on marketplace platforms.
+(2) Prohibition against posting fake consumer reviews or impersonating genuine consumers.
+(3) Mandatory acceptance of returns and refunds: no seller shall refuse to take back goods, discontinue services, or refuse to refund consideration if goods/services are defective, deficient, spurious, or delivered beyond agreed schedule.
+(4) Written contract with marketplace entity, appointment of Grievance Officer (48 hr acknowledgment, 1 month redressal).
+
+Rule 7. Duties and liabilities of inventory e-commerce entities:
+(1) Display total price, delivery terms, country of origin, return/refund policy.
+(4) Prohibition against refusal of returns and refunds for defective, deficient, or non-conforming goods.
+(5) Grievance officer with 48 hour acknowledgment and 1 month redressal SLA.
+
+Rule 8. Contravention: provisions of Consumer Protection Act, 2019 apply for all violations.
