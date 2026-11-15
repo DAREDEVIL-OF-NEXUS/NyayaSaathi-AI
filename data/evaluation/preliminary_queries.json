@@ -1,0 +1,126 @@
+{
+  "benchmark_version": "1.0",
+  "domain": "Indian Consumer Protection & Grievance Redressal",
+  "queries": [
+    {
+      "id": "eval_01",
+      "query": "What is the pecuniary jurisdiction limit for filing a consumer complaint in the District Commission?",
+      "expected_category": "2_regulatory_ccpa",
+      "expected_provision": "Rule 2",
+      "expected_keywords": ["District Commission", "fifty lakh", "50 lakh", "rupees"],
+      "difficulty": "direct_statutory"
+    },
+    {
+      "id": "eval_02",
+      "query": "What is the pecuniary jurisdiction of the State Consumer Commission?",
+      "expected_category": "2_regulatory_ccpa",
+      "expected_provision": "Rule 2",
+      "expected_keywords": ["State Commission", "two crore", "fifty lakh"],
+      "difficulty": "direct_statutory"
+    },
+    {
+      "id": "eval_03",
+      "query": "What is the time limit for an e-commerce platform to acknowledge a consumer grievance?",
+      "expected_category": "2_regulatory_ccpa",
+      "expected_provision": "Rule 5",
+      "expected_keywords": ["forty-eight hours", "48 hours", "grievance officer", "ticket number"],
+      "difficulty": "direct_regulatory"
+    },
+    {
+      "id": "eval_04",
+      "query": "Within how many days must an e-commerce company resolve a customer complaint?",
+      "expected_category": "2_regulatory_ccpa",
+      "expected_provision": "Rule 5",
+      "expected_keywords": ["one month", "thirty days", "redressal"],
+      "difficulty": "direct_regulatory"
+    },
+    {
+      "id": "eval_05",
+      "query": "What is the toll-free helpline number to register a grievance with the National Consumer Helpline?",
+      "expected_category": "3_nch_procedures",
+      "expected_provision": "NCH SOP",
+      "expected_keywords": ["1915", "National Consumer Helpline", "SMS", "portal"],
+      "difficulty": "procedural"
+    },
+    {
+      "id": "eval_06",
+      "query": "What are dark patterns in online advertising according to CCPA guidelines?",
+      "expected_category": "2_regulatory_ccpa",
+      "expected_provision": "CCPA Guidelines 2022",
+      "expected_keywords": ["misleading", "dark patterns", "advertisement", "CCPA"],
+      "difficulty": "regulatory_guideline"
+    },
+    {
+      "id": "eval_07",
+      "query": "Can an e-commerce entity impose cancellation charges on consumers after purchase confirmation?",
+      "expected_category": "2_regulatory_ccpa",
+      "expected_provision": "Rule 4",
+      "expected_keywords": ["cancellation charges", "unilateral", "similar charges"],
+      "difficulty": "regulatory_compliance"
+    },
+    {
+      "id": "eval_08",
+      "query": "What are the powers of the Central Consumer Protection Authority (CCPA) under CPA 2019?",
+      "expected_category": "1_statutory",
+      "expected_provision": "Section 18",
+      "expected_keywords": ["Central Authority", "inquire", "investigation", "recall"],
+      "difficulty": "statutory_powers"
+    },
+    {
+      "id": "eval_09",
+      "query": "How many days are allowed to appeal an order of the District Commission to the State Commission?",
+      "expected_category": "1_statutory",
+      "expected_provision": "Section 41",
+      "expected_keywords": ["appeal", "forty-five days", "State Commission", "District Commission"],
+      "difficulty": "appellate_procedure"
+    },
+    {
+      "id": "eval_10",
+      "query": "What is the limitation period for filing a consumer complaint after the cause of action arises?",
+      "expected_category": "1_statutory",
+      "expected_provision": "Section 69",
+      "expected_keywords": ["two years", "limitation", "cause of action"],
+      "difficulty": "statutory_limitation"
+    },
+    {
+      "id": "eval_11",
+      "query": "Are inventory e-commerce entities required to accept return of defective or delayed goods?",
+      "expected_category": "2_regulatory_ccpa",
+      "expected_provision": "Rule 7",
+      "expected_keywords": ["inventory e-commerce", "refund", "defective", "return"],
+      "difficulty": "regulatory_compliance"
+    },
+    {
+      "id": "eval_12",
+      "query": "Can consumer disputes be referred to mediation under the Consumer Protection Act, 2019?",
+      "expected_category": "1_statutory",
+      "expected_provision": "Section 37",
+      "expected_keywords": ["mediation", "settlement", "consumer mediation cell"],
+      "difficulty": "adr_procedure"
+    },
+    {
+      "id": "eval_13",
+      "query": "What information must marketplace e-commerce platforms disclose about sellers?",
+      "expected_category": "2_regulatory_ccpa",
+      "expected_provision": "Rule 6",
+      "expected_keywords": ["seller details", "address", "customer care", "country of origin"],
+      "difficulty": "regulatory_transparency"
+    },
+    {
+      "id": "eval_14",
+      "query": "What is the procedure for registering a consumer grievance online through INGRAM / NCH?",
+      "expected_category": "3_nch_procedures",
+      "expected_provision": "NCH Registration",
+      "expected_keywords": ["INGRAM", "register", "docket", "tracking"],
+      "difficulty": "procedural"
+    },
+    {
+      "id": "eval_15",
+      "query": "What constitutes an unfair trade practice in misleading advertisements?",
+      "expected_category": "2_regulatory_ccpa",
+      "expected_provision": "CCPA Guidelines 2022",
+      "expected_keywords": ["unfair trade practice", "misleading", "false representation", "substantiation"],
+      "difficulty": "regulatory_definition"
+    }
+  ]
+}

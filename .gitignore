@@ -58,3 +58,6 @@ desktop.ini
 # IDEs
 .vscode/
 .idea/
+
+# Data artifacts
+*.pkl
