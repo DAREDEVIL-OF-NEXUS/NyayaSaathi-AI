@@ -1,11 +1,27 @@
-from backend.app.models.entities import Conversation, Message, ComplaintDraft, DocumentUpload
-from backend.app.services.graph.models import LegalEntityModel, LegalRelationshipModel
+from .entities import (
+    User,
+    UserSession,
+    MFAConfiguration,
+    BackupCode,
+    EmailVerificationToken,
+    PasswordResetToken,
+    AuditLog,
+    Conversation,
+    Message,
+    ComplaintDraft,
+    DocumentUpload,
+)
 
 __all__ = [
+    "User",
+    "UserSession",
+    "MFAConfiguration",
+    "BackupCode",
+    "EmailVerificationToken",
+    "PasswordResetToken",
+    "AuditLog",
     "Conversation",
     "Message",
     "ComplaintDraft",
     "DocumentUpload",
-    "LegalEntityModel",
-    "LegalRelationshipModel"
 ]

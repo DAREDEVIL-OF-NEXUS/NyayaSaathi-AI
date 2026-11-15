@@ -17,8 +17,16 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY backend /app/backend
 COPY data /app/data
 
+# Create non-root user and set permissions
+RUN useradd -m -u 1000 appuser && \
+    mkdir -p /app/data/uploads /app/data/qdrant_db && \
+    chown -R appuser:appuser /app
+
+USER appuser
+
 # Set python path
-ENV PYTHONPATH=/app
+ENV PYTHONPATH=/app \
+    PYTHONUNBUFFERED=1
 
 EXPOSE 8000
 

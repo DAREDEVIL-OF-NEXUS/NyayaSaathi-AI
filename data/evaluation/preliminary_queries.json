@@ -1,6 +1,7 @@
 {
-  "benchmark_version": "1.0",
-  "domain": "Indian Consumer Protection & Grievance Redressal",
+  "benchmark_version": "2.0",
+  "domain": "Indian Consumer Protection, E-Commerce, and Grievance Redressal",
+  "total_queries": 52,
   "queries": [
     {
       "id": "eval_01",
@@ -20,107 +21,403 @@
     },
     {
       "id": "eval_03",
-      "query": "What is the time limit for an e-commerce platform to acknowledge a consumer grievance?",
+      "query": "What is the pecuniary jurisdiction threshold of the National Consumer Disputes Redressal Commission?",
       "expected_category": "2_regulatory_ccpa",
-      "expected_provision": "Rule 5",
+      "expected_provision": "Rule 2",
+      "expected_keywords": ["National Commission", "exceeds", "two crore"],
+      "difficulty": "direct_statutory"
+    },
+    {
+      "id": "eval_04",
+      "query": "If the consideration paid for a car is exactly Rs 50,00,000, which consumer commission has jurisdiction?",
+      "expected_category": "2_regulatory_ccpa",
+      "expected_provision": "Rule 2",
+      "expected_keywords": ["District Commission", "fifty lakh", "does not exceed"],
+      "difficulty": "boundary_pecuniary"
+    },
+    {
+      "id": "eval_05",
+      "query": "If I paid Rs 50,00,001 for goods, can I file a consumer case in the District Commission?",
+      "expected_category": "2_regulatory_ccpa",
+      "expected_provision": "Rule 2",
+      "expected_keywords": ["State Commission", "exceeds", "fifty lakh"],
+      "difficulty": "boundary_pecuniary"
+    },
+    {
+      "id": "eval_06",
+      "query": "If the goods cost Rs 40 Lakhs but I claim Rs 25 Lakhs compensation for mental agony, which forum has jurisdiction?",
+      "expected_category": "2_regulatory_ccpa",
+      "expected_provision": "Rule 2",
+      "expected_keywords": ["District Commission", "consideration paid", "compensation"],
+      "difficulty": "boundary_pecuniary"
+    },
+    {
+      "id": "eval_07",
+      "query": "How is a 'consumer' defined under Section 2(7) of the Consumer Protection Act 2019?",
+      "expected_category": "1_statutory_cpa_2019",
+      "expected_provision": "Section 2(7)",
+      "expected_keywords": ["consumer", "consideration", "commercial purpose", "self-employment"],
+      "difficulty": "direct_statutory"
+    },
+    {
+      "id": "eval_08",
+      "query": "Does a person who buys goods for resale or commercial purpose qualify as a consumer under CPA 2019?",
+      "expected_category": "1_statutory_cpa_2019",
+      "expected_provision": "Section 2(7)",
+      "expected_keywords": ["commercial purpose", "resale", "does not include", "self-employment"],
+      "difficulty": "statutory_interpretation"
+    },
+    {
+      "id": "eval_09",
+      "query": "What is the definition of 'defect' in goods under Section 2(10) of the Consumer Protection Act, 2019?",
+      "expected_category": "1_statutory_cpa_2019",
+      "expected_provision": "Section 2(10)",
+      "expected_keywords": ["defect", "fault", "imperfection", "shortcoming", "quality"],
+      "difficulty": "direct_statutory"
+    },
+    {
+      "id": "eval_10",
+      "query": "What constitutes 'deficiency' in service under Section 2(11) of the Act?",
+      "expected_category": "1_statutory_cpa_2019",
+      "expected_provision": "Section 2(11)",
+      "expected_keywords": ["deficiency", "service", "fault", "imperfection", "inadequacy"],
+      "difficulty": "direct_statutory"
+    },
+    {
+      "id": "eval_11",
+      "query": "What is 'product liability' under Section 2(34) and Chapter VI of CPA 2019?",
+      "expected_category": "1_statutory_cpa_2019",
+      "expected_provision": "Section 2(34)",
+      "expected_keywords": ["product liability", "manufacturer", "seller", "harm", "defective"],
+      "difficulty": "direct_statutory"
+    },
+    {
+      "id": "eval_12",
+      "query": "What are the grounds of liability of a product manufacturer under Section 84 of the Consumer Protection Act?",
+      "expected_category": "1_statutory_cpa_2019",
+      "expected_provision": "Section 84",
+      "expected_keywords": ["manufacturing defect", "design defect", "warranty", "warning"],
+      "difficulty": "direct_statutory"
+    },
+    {
+      "id": "eval_13",
+      "query": "When can a product service provider be held liable under Section 85 of the Consumer Protection Act?",
+      "expected_category": "1_statutory_cpa_2019",
+      "expected_provision": "Section 85",
+      "expected_keywords": ["service provider", "faulty", "inadequate", "negligent"],
+      "difficulty": "direct_statutory"
+    },
+    {
+      "id": "eval_14",
+      "query": "What constitutes an 'unfair trade practice' under Section 2(47) of the Consumer Protection Act, 2019?",
+      "expected_category": "1_statutory_cpa_2019",
+      "expected_provision": "Section 2(47)",
+      "expected_keywords": ["unfair trade practice", "deceptive", "false representation", "warranty"],
+      "difficulty": "direct_statutory"
+    },
+    {
+      "id": "eval_15",
+      "query": "What is an 'unfair contract' under Section 2(46) of the Consumer Protection Act 2019?",
+      "expected_category": "1_statutory_cpa_2019",
+      "expected_provision": "Section 2(46)",
+      "expected_keywords": ["unfair contract", "excessive deposit", "unilateral termination", "penalty"],
+      "difficulty": "direct_statutory"
+    },
+    {
+      "id": "eval_16",
+      "query": "What are the powers and functions of the Central Consumer Protection Authority (CCPA) under Section 18?",
+      "expected_category": "1_statutory_cpa_2019",
+      "expected_provision": "Section 18",
+      "expected_keywords": ["CCPA", "Central Authority", "investigation", "recall", "misleading"],
+      "difficulty": "direct_statutory"
+    },
+    {
+      "id": "eval_17",
+      "query": "Can the CCPA order recall of dangerous goods and reimbursement of prices to consumers?",
+      "expected_category": "1_statutory_cpa_2019",
+      "expected_provision": "Section 20",
+      "expected_keywords": ["recall", "reimbursement", "dangerous", "CCPA"],
+      "difficulty": "direct_statutory"
+    },
+    {
+      "id": "eval_18",
+      "query": "What is the penalty under Section 88 for failing to comply with CCPA orders?",
+      "expected_category": "1_statutory_cpa_2019",
+      "expected_provision": "Section 88",
+      "expected_keywords": ["imprisonment", "fine", "penalty", "order"],
+      "difficulty": "direct_statutory"
+    },
+    {
+      "id": "eval_19",
+      "query": "What is the manner in which a consumer complaint is made under Section 35 of the CPA 2019?",
+      "expected_category": "1_statutory_cpa_2019",
+      "expected_provision": "Section 35",
+      "expected_keywords": ["Section 35", "complaint", "District Commission", "fee", "electronic"],
+      "difficulty": "procedural"
+    },
+    {
+      "id": "eval_20",
+      "query": "What is the limitation period for filing a complaint before a Consumer Commission under Section 69?",
+      "expected_category": "1_statutory_cpa_2019",
+      "expected_provision": "Section 69",
+      "expected_keywords": ["two years", "2 years", "limitation", "cause of action"],
+      "difficulty": "direct_statutory"
+    },
+    {
+      "id": "eval_21",
+      "query": "Can a consumer complaint be admitted after the expiry of the two-year limitation period under Section 69?",
+      "expected_category": "1_statutory_cpa_2019",
+      "expected_provision": "Section 69",
+      "expected_keywords": ["sufficient cause", "condonation of delay", "reasons recorded"],
+      "difficulty": "procedural"
+    },
+    {
+      "id": "eval_22",
+      "query": "What is the mediation mechanism provided under Section 37 of the Consumer Protection Act, 2019?",
+      "expected_category": "1_statutory_cpa_2019",
+      "expected_provision": "Section 37",
+      "expected_keywords": ["mediation", "settlement", "consent", "consumer mediation cell"],
+      "difficulty": "procedural"
+    },
+    {
+      "id": "eval_23",
+      "query": "Can an appeal be filed against a settlement reached through consumer mediation under Section 37?",
+      "expected_category": "1_statutory_cpa_2019",
+      "expected_provision": "Section 37",
+      "expected_keywords": ["no appeal", "settlement", "final", "mediation"],
+      "difficulty": "statutory_interpretation"
+    },
+    {
+      "id": "eval_24",
+      "query": "Within how many days must an appeal against an order of the District Commission be filed before the State Commission?",
+      "expected_category": "1_statutory_cpa_2019",
+      "expected_provision": "Section 41",
+      "expected_keywords": ["forty-five days", "45 days", "appeal", "State Commission"],
+      "difficulty": "direct_statutory"
+    },
+    {
+      "id": "eval_25",
+      "query": "What deposit is required to file an appeal before the State Commission under Section 41?",
+      "expected_category": "1_statutory_cpa_2019",
+      "expected_provision": "Section 41",
+      "expected_keywords": ["fifty percent", "50%", "deposit", "appellant"],
+      "difficulty": "direct_statutory"
+    },
+    {
+      "id": "eval_26",
+      "query": "What is the time limit for an e-commerce platform to acknowledge a consumer grievance under the E-Commerce Rules 2020?",
+      "expected_category": "2_regulatory_ccpa",
+      "expected_provision": "Rule 4",
       "expected_keywords": ["forty-eight hours", "48 hours", "grievance officer", "ticket number"],
       "difficulty": "direct_regulatory"
     },
     {
-      "id": "eval_04",
-      "query": "Within how many days must an e-commerce company resolve a customer complaint?",
+      "id": "eval_27",
+      "query": "Within how many days must an e-commerce entity redress a grievance from the date of receipt under Rule 4?",
       "expected_category": "2_regulatory_ccpa",
-      "expected_provision": "Rule 5",
-      "expected_keywords": ["one month", "thirty days", "redressal"],
+      "expected_provision": "Rule 4",
+      "expected_keywords": ["one month", "thirty days", "redressal", "receipt"],
       "difficulty": "direct_regulatory"
     },
     {
-      "id": "eval_05",
+      "id": "eval_28",
+      "query": "Are e-commerce entities permitted to impose cancellation charges if the consumer did not cancel voluntarily?",
+      "expected_category": "2_regulatory_ccpa",
+      "expected_provision": "Rule 4",
+      "expected_keywords": ["cancellation charges", "unreasonable", "similar charges"],
+      "difficulty": "direct_regulatory"
+    },
+    {
+      "id": "eval_29",
+      "query": "Can an e-commerce platform automatically pre-tick opt-in boxes or auto-add warranty fees to checkout?",
+      "expected_category": "2_regulatory_ccpa",
+      "expected_provision": "Rule 4",
+      "expected_keywords": ["explicit consent", "automatic", "pre-ticked", "opt-in"],
+      "difficulty": "direct_regulatory"
+    },
+    {
+      "id": "eval_30",
+      "query": "What details of sellers must marketplace e-commerce platforms display under Rule 5 of E-Commerce Rules 2020?",
+      "expected_category": "2_regulatory_ccpa",
+      "expected_provision": "Rule 5",
+      "expected_keywords": ["seller legal name", "address", "customer care", "contact", "ratings"],
+      "difficulty": "direct_regulatory"
+    },
+    {
+      "id": "eval_31",
+      "query": "What information must a seller on an e-commerce marketplace disclose under Rule 6?",
+      "expected_category": "2_regulatory_ccpa",
+      "expected_provision": "Rule 6",
+      "expected_keywords": ["total price", "breakup", "country of origin", "refund policy"],
+      "difficulty": "direct_regulatory"
+    },
+    {
+      "id": "eval_32",
+      "query": "Can an inventory e-commerce entity refuse to take back defective or delayed goods?",
+      "expected_category": "2_regulatory_ccpa",
+      "expected_provision": "Rule 7",
+      "expected_keywords": ["refuse", "return", "defective", "refund", "delayed"],
+      "difficulty": "direct_regulatory"
+    },
+    {
+      "id": "eval_33",
       "query": "What is the toll-free helpline number to register a grievance with the National Consumer Helpline?",
       "expected_category": "3_nch_procedures",
       "expected_provision": "NCH SOP",
-      "expected_keywords": ["1915", "National Consumer Helpline", "SMS", "portal"],
+      "expected_keywords": ["1915", "National Consumer Helpline", "helpline", "SMS"],
       "difficulty": "procedural"
     },
     {
-      "id": "eval_06",
+      "id": "eval_34",
+      "query": "What are the operating hours and days for the National Consumer Helpline 1915?",
+      "expected_category": "3_nch_procedures",
+      "expected_provision": "NCH SOP",
+      "expected_keywords": ["8:00 AM", "8:00 PM", "Monday to Saturday", "holidays"],
+      "difficulty": "procedural"
+    },
+    {
+      "id": "eval_35",
+      "query": "How can a consumer file a grievance on the National Consumer Helpline INGRAM online portal?",
+      "expected_category": "3_nch_procedures",
+      "expected_provision": "NCH Portal",
+      "expected_keywords": ["INGRAM", "registration", "docket number", "grievance", "track"],
+      "difficulty": "procedural"
+    },
+    {
+      "id": "eval_36",
+      "query": "What is the official digital portal for online filing of cases in Consumer Commissions across India?",
+      "expected_category": "4_ejagriti_filing",
+      "expected_provision": "e-Jagriti System",
+      "expected_keywords": ["e-Jagriti", "edaakhil", "online filing", "fee", "digital payment"],
+      "difficulty": "procedural"
+    },
+    {
+      "id": "eval_37",
+      "query": "Can consumer cases in District Commissions be heard through video conferencing under e-Jagriti?",
+      "expected_category": "4_ejagriti_filing",
+      "expected_provision": "e-Jagriti",
+      "expected_keywords": ["virtual hearing", "video conference", "digital summons", "e-Jagriti"],
+      "difficulty": "procedural"
+    },
+    {
+      "id": "eval_38",
       "query": "What are dark patterns in online advertising according to CCPA guidelines?",
       "expected_category": "2_regulatory_ccpa",
       "expected_provision": "CCPA Guidelines 2022",
-      "expected_keywords": ["misleading", "dark patterns", "advertisement", "CCPA"],
-      "difficulty": "regulatory_guideline"
+      "expected_keywords": ["misleading", "dark patterns", "advertisement", "CCPA", "deceptive"],
+      "difficulty": "direct_regulatory"
     },
     {
-      "id": "eval_07",
-      "query": "Can an e-commerce entity impose cancellation charges on consumers after purchase confirmation?",
+      "id": "eval_39",
+      "query": "What is 'drip pricing' under consumer protection dark pattern regulations?",
       "expected_category": "2_regulatory_ccpa",
-      "expected_provision": "Rule 4",
-      "expected_keywords": ["cancellation charges", "unilateral", "similar charges"],
-      "difficulty": "regulatory_compliance"
+      "expected_provision": "CCPA Guidelines 2022",
+      "expected_keywords": ["drip pricing", "hidden charges", "undisclosed", "checkout"],
+      "difficulty": "direct_regulatory"
     },
     {
-      "id": "eval_08",
-      "query": "What are the powers of the Central Consumer Protection Authority (CCPA) under CPA 2019?",
-      "expected_category": "1_statutory",
-      "expected_provision": "Section 18",
-      "expected_keywords": ["Central Authority", "inquire", "investigation", "recall"],
-      "difficulty": "statutory_powers"
-    },
-    {
-      "id": "eval_09",
-      "query": "How many days are allowed to appeal an order of the District Commission to the State Commission?",
-      "expected_category": "1_statutory",
-      "expected_provision": "Section 41",
-      "expected_keywords": ["appeal", "forty-five days", "State Commission", "District Commission"],
-      "difficulty": "appellate_procedure"
-    },
-    {
-      "id": "eval_10",
-      "query": "What is the limitation period for filing a consumer complaint after the cause of action arises?",
-      "expected_category": "1_statutory",
-      "expected_provision": "Section 69",
-      "expected_keywords": ["two years", "limitation", "cause of action"],
-      "difficulty": "statutory_limitation"
-    },
-    {
-      "id": "eval_11",
-      "query": "Are inventory e-commerce entities required to accept return of defective or delayed goods?",
+      "id": "eval_40",
+      "query": "What is 'basket sneaking' in online e-commerce transactions?",
       "expected_category": "2_regulatory_ccpa",
-      "expected_provision": "Rule 7",
-      "expected_keywords": ["inventory e-commerce", "refund", "defective", "return"],
-      "difficulty": "regulatory_compliance"
+      "expected_provision": "CCPA Guidelines 2022",
+      "expected_keywords": ["basket sneaking", "unsolicited", "automatic add", "cart"],
+      "difficulty": "direct_regulatory"
     },
     {
-      "id": "eval_12",
-      "query": "Can consumer disputes be referred to mediation under the Consumer Protection Act, 2019?",
-      "expected_category": "1_statutory",
-      "expected_provision": "Section 37",
-      "expected_keywords": ["mediation", "settlement", "consumer mediation cell"],
-      "difficulty": "adr_procedure"
-    },
-    {
-      "id": "eval_13",
-      "query": "What information must marketplace e-commerce platforms disclose about sellers?",
+      "id": "eval_41",
+      "query": "What are the rules regarding surrogate advertising under the CCPA Guidelines 2022?",
       "expected_category": "2_regulatory_ccpa",
-      "expected_provision": "Rule 6",
-      "expected_keywords": ["seller details", "address", "customer care", "country of origin"],
-      "difficulty": "regulatory_transparency"
+      "expected_provision": "CCPA Guidelines 2022",
+      "expected_keywords": ["surrogate advertisement", "prohibited", "brand extension", "restricted"],
+      "difficulty": "direct_regulatory"
     },
     {
-      "id": "eval_14",
-      "query": "What is the procedure for registering a consumer grievance online through INGRAM / NCH?",
-      "expected_category": "3_nch_procedures",
-      "expected_provision": "NCH Registration",
-      "expected_keywords": ["INGRAM", "register", "docket", "tracking"],
+      "id": "eval_42",
+      "query": "What conditions must be satisfied for a 'free claim' advertisement under CCPA guidelines?",
+      "expected_category": "2_regulatory_ccpa",
+      "expected_provision": "CCPA Guidelines 2022",
+      "expected_keywords": ["free claim", "hidden cost", "packing", "free of charge"],
+      "difficulty": "direct_regulatory"
+    },
+    {
+      "id": "eval_43",
+      "query": "What duties do celebrity endorsers have before endorsing a product under CCPA Guidelines 2022?",
+      "expected_category": "2_regulatory_ccpa",
+      "expected_provision": "CCPA Guidelines 2022",
+      "expected_keywords": ["due diligence", "endorser", "authentic", "material connection"],
+      "difficulty": "direct_regulatory"
+    },
+    {
+      "id": "eval_44",
+      "query": "What is the penalty that CCPA can impose on a manufacturer or endorser for misleading advertisements?",
+      "expected_category": "1_statutory_cpa_2019",
+      "expected_provision": "Section 21",
+      "expected_keywords": ["ten lakh", "10 lakh", "fifty lakh", "penalty", "prohibition"],
+      "difficulty": "direct_statutory"
+    },
+    {
+      "id": "eval_45",
+      "query": "Can an endorser escape penalty if they conducted due diligence regarding the advertisement claims?",
+      "expected_category": "1_statutory_cpa_2019",
+      "expected_provision": "Section 21",
+      "expected_keywords": ["due diligence", "exemption", "bona fide", "endorser"],
+      "difficulty": "statutory_interpretation"
+    },
+    {
+      "id": "eval_46",
+      "query": "What are the consumer rights recognized under Section 2(9) of the Consumer Protection Act?",
+      "expected_category": "1_statutory_cpa_2019",
+      "expected_provision": "Section 2(9)",
+      "expected_keywords": ["consumer rights", "safety", "information", "choice", "redressal"],
+      "difficulty": "direct_statutory"
+    },
+    {
+      "id": "eval_47",
+      "query": "Can a consumer file a complaint at the District Commission where the complainant resides, rather than where the seller resides?",
+      "expected_category": "1_statutory_cpa_2019",
+      "expected_provision": "Section 34",
+      "expected_keywords": ["complainant resides", "works for gain", "territorial jurisdiction", "place of residence"],
       "difficulty": "procedural"
     },
     {
-      "id": "eval_15",
-      "query": "What constitutes an unfair trade practice in misleading advertisements?",
-      "expected_category": "2_regulatory_ccpa",
-      "expected_provision": "CCPA Guidelines 2022",
-      "expected_keywords": ["unfair trade practice", "misleading", "false representation", "substantiation"],
-      "difficulty": "regulatory_definition"
+      "id": "eval_48",
+      "query": "How does a consumer claim compensation for a motor vehicle accident fatal injury under the Motor Vehicles Act?",
+      "expected_category": "out_of_scope",
+      "expected_provision": "Not Applicable",
+      "expected_keywords": ["Motor Accident Claims Tribunal", "MACT", "out of scope", "Motor Vehicles Act"],
+      "difficulty": "out_of_scope_abstention"
+    },
+    {
+      "id": "eval_49",
+      "query": "Can I file a consumer case against police for not registering a murder FIR under Section 302 of Indian Penal Code?",
+      "expected_category": "out_of_scope",
+      "expected_provision": "Not Applicable",
+      "expected_keywords": ["criminal law", "sovereign function", "out of scope", "police"],
+      "difficulty": "out_of_scope_abstention"
+    },
+    {
+      "id": "eval_50",
+      "query": "How do I file a second appeal under the Right to Information Act, 2005 before the Central Information Commission?",
+      "expected_category": "out_of_scope",
+      "expected_provision": "Not Applicable",
+      "expected_keywords": ["Right to Information", "CIC", "RTI Act", "out of scope"],
+      "difficulty": "out_of_scope_abstention"
+    },
+    {
+      "id": "eval_51",
+      "query": "If a commercial wholesale dealer buys 1000 industrial machines for factory production, can they sue in Consumer Court?",
+      "expected_category": "1_statutory_cpa_2019",
+      "expected_provision": "Section 2(7)",
+      "expected_keywords": ["commercial purpose", "not a consumer", "large scale", "profit"],
+      "difficulty": "statutory_interpretation"
+    },
+    {
+      "id": "eval_52",
+      "query": "Is a homebuyer who is delayed possession by a real estate builder covered as a consumer under CPA 2019 or must they only go to RERA?",
+      "expected_category": "1_statutory_cpa_2019",
+      "expected_provision": "Section 2(11)",
+      "expected_keywords": ["homebuyer", "housing construction", "concurrent remedy", "RERA", "deficiency"],
+      "difficulty": "statutory_interpretation"
     }
   ]
 }

@@ -5,13 +5,14 @@ from fastapi import APIRouter, Depends, HTTPException, Response, status
 from sqlalchemy.orm import Session
 
 from backend.app.core.database import get_db
-from backend.app.models.entities import ComplaintDraft
+from backend.app.models.entities import ComplaintDraft, User
 from backend.app.schemas.complaint import (
     ComplaintClassifyRequest,
     ComplaintClassification,
     ComplaintDraftRequest,
     ComplaintDraftResponse,
 )
+from backend.app.api.deps import get_optional_current_user
 from backend.app.services.complaint.engine import ComplaintEngine
 
 router = APIRouter()
@@ -27,7 +28,11 @@ def classify_complaint_endpoint(req: ComplaintClassifyRequest):
 
 
 @router.post("/complaints/draft", response_model=ComplaintDraftResponse, summary="Generate formal Section 35 consumer complaint draft")
-def draft_complaint_endpoint(req: ComplaintDraftRequest, db: Session = Depends(get_db)):
+def draft_complaint_endpoint(
+    req: ComplaintDraftRequest,
+    current_user: Optional[User] = Depends(get_optional_current_user),
+    db: Session = Depends(get_db)
+):
     draft_text, citations = complaint_engine.draft_formal_complaint(req)
     classification = complaint_engine.classify_grievance(
         grievance_description=req.facts_of_case,
@@ -37,6 +42,7 @@ def draft_complaint_endpoint(req: ComplaintDraftRequest, db: Session = Depends(g
 
     complaint_record = ComplaintDraft(
         id=str(uuid.uuid4()),
+        user_id=current_user.id if current_user else None,
         complainant_name=req.complainant_name,
         complainant_contact=req.complainant_contact,
         complainant_address=req.complainant_address,
@@ -74,8 +80,17 @@ def draft_complaint_endpoint(req: ComplaintDraftRequest, db: Session = Depends(g
 
 
 @router.get("/complaints", response_model=List[ComplaintDraftResponse], summary="List all saved complaint drafts")
-def list_complaints(db: Session = Depends(get_db)):
-    drafts = db.query(ComplaintDraft).order_by(ComplaintDraft.created_at.desc()).all()
+def list_complaints(
+    current_user: Optional[User] = Depends(get_optional_current_user),
+    db: Session = Depends(get_db)
+):
+    query = db.query(ComplaintDraft)
+    if current_user:
+        query = query.filter(ComplaintDraft.user_id == current_user.id)
+    else:
+        query = query.filter(ComplaintDraft.user_id == None)
+
+    drafts = query.order_by(ComplaintDraft.created_at.desc()).all()
     return [
         ComplaintDraftResponse(
             id=d.id,
@@ -94,10 +109,17 @@ def list_complaints(db: Session = Depends(get_db)):
 
 
 @router.get("/complaints/{complaint_id}", response_model=ComplaintDraftResponse, summary="Get complaint draft by ID")
-def get_complaint(complaint_id: str, db: Session = Depends(get_db)):
+def get_complaint(
+    complaint_id: str,
+    current_user: Optional[User] = Depends(get_optional_current_user),
+    db: Session = Depends(get_db)
+):
     d = db.query(ComplaintDraft).filter(ComplaintDraft.id == complaint_id).first()
     if not d:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Complaint draft not found")
+
+    if d.user_id and (not current_user or d.user_id != current_user.id):
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Access denied to this complaint draft.")
 
     return ComplaintDraftResponse(
         id=d.id,
@@ -114,10 +136,18 @@ def get_complaint(complaint_id: str, db: Session = Depends(get_db)):
 
 
 @router.get("/complaints/{complaint_id}/export", summary="Export formal complaint draft as plaintext or downloadable file")
-def export_complaint(complaint_id: str, format: Optional[str] = "download", db: Session = Depends(get_db)):
+def export_complaint(
+    complaint_id: str,
+    format: Optional[str] = "download",
+    current_user: Optional[User] = Depends(get_optional_current_user),
+    db: Session = Depends(get_db)
+):
     d = db.query(ComplaintDraft).filter(ComplaintDraft.id == complaint_id).first()
     if not d:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Complaint draft not found")
+
+    if d.user_id and (not current_user or d.user_id != current_user.id):
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Access denied to this complaint draft.")
 
     headers = {}
     if format == "download":

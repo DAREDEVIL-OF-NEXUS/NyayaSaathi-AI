@@ -8,7 +8,7 @@ from fastapi.responses import StreamingResponse
 from sqlalchemy.orm import Session
 
 from backend.app.core.database import get_db
-from backend.app.models.entities import Conversation, Message
+from backend.app.models.entities import Conversation, Message, User
 from backend.app.schemas.chat import (
     ChatRequest,
     ChatResponse,
@@ -16,19 +16,33 @@ from backend.app.schemas.chat import (
     MessageItem,
     FeedbackRequest,
 )
+from backend.app.api.deps import get_optional_current_user
 from backend.app.services.rag.generation import get_generation_service, RAGGenerationService
 
 router = APIRouter()
 
-def get_or_create_conversation(db: Session, conversation_id: Optional[str], initial_title: str) -> Conversation:
+def get_or_create_conversation(
+    db: Session,
+    conversation_id: Optional[str],
+    initial_title: str,
+    user: Optional[User] = None
+) -> Conversation:
     if conversation_id:
         conv = db.query(Conversation).filter(Conversation.id == conversation_id).first()
         if conv:
+            # Enforce tenant isolation if conversation has an owner
+            if conv.user_id and (not user or conv.user_id != user.id):
+                raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Access denied to this consultation.")
+            # If conversation is unowned and user signs in, claim it
+            if not conv.user_id and user:
+                conv.user_id = user.id
+                db.commit()
             return conv
-    
+
     title = (initial_title[:45] + "...") if len(initial_title) > 45 else initial_title
     new_conv = Conversation(
         id=str(uuid.uuid4()),
+        user_id=user.id if user else None,
         title=title or "Consumer Consultation",
         created_at=datetime.datetime.utcnow(),
         updated_at=datetime.datetime.utcnow()
@@ -42,10 +56,11 @@ def get_or_create_conversation(db: Session, conversation_id: Optional[str], init
 @router.post("/chat", response_model=ChatResponse, summary="Submit a consumer query and get structured legal response")
 def chat_endpoint(
     req: ChatRequest,
+    current_user: Optional[User] = Depends(get_optional_current_user),
     db: Session = Depends(get_db),
     gen_service: RAGGenerationService = Depends(get_generation_service)
 ):
-    conv = get_or_create_conversation(db, req.conversation_id, req.query)
+    conv = get_or_create_conversation(db, req.conversation_id, req.query, user=current_user)
 
     user_msg = Message(
         id=str(uuid.uuid4()),
@@ -87,10 +102,11 @@ def chat_endpoint(
 @router.post("/chat/stream", summary="Stream structured legal consultation via Server-Sent Events (SSE)")
 async def chat_stream_endpoint(
     req: ChatRequest,
+    current_user: Optional[User] = Depends(get_optional_current_user),
     db: Session = Depends(get_db),
     gen_service: RAGGenerationService = Depends(get_generation_service)
 ):
-    conv = get_or_create_conversation(db, req.conversation_id, req.query)
+    conv = get_or_create_conversation(db, req.conversation_id, req.query, user=current_user)
 
     user_msg = Message(
         id=str(uuid.uuid4()),
@@ -106,7 +122,6 @@ async def chat_stream_endpoint(
         yield f"data: {json.dumps({'type': 'status', 'stage': 'crag_retrieval', 'message': 'Retrieving statutory provisions and official SOPs...'})}\n\n"
         await asyncio.sleep(0.02)
 
-        # Generate response synchronously in threadpool if needed or directly
         structured_res = gen_service.generate_response(
             query=req.query,
             top_k=req.top_k or 6,
@@ -147,8 +162,17 @@ async def chat_stream_endpoint(
 
 
 @router.get("/conversations", response_model=List[ConversationSummary], summary="List all consultations")
-def list_conversations(db: Session = Depends(get_db)):
-    convs = db.query(Conversation).order_by(Conversation.updated_at.desc()).all()
+def list_conversations(
+    current_user: Optional[User] = Depends(get_optional_current_user),
+    db: Session = Depends(get_db)
+):
+    query = db.query(Conversation)
+    if current_user:
+        query = query.filter(Conversation.user_id == current_user.id)
+    else:
+        query = query.filter(Conversation.user_id == None)
+
+    convs = query.order_by(Conversation.updated_at.desc()).all()
     summaries = []
     for c in convs:
         summaries.append(
@@ -164,11 +188,18 @@ def list_conversations(db: Session = Depends(get_db)):
 
 
 @router.get("/conversations/{conversation_id}", response_model=List[MessageItem], summary="Get messages in a consultation")
-def get_conversation_messages(conversation_id: str, db: Session = Depends(get_db)):
+def get_conversation_messages(
+    conversation_id: str,
+    current_user: Optional[User] = Depends(get_optional_current_user),
+    db: Session = Depends(get_db)
+):
     conv = db.query(Conversation).filter(Conversation.id == conversation_id).first()
     if not conv:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Conversation not found")
-    
+
+    if conv.user_id and (not current_user or conv.user_id != current_user.id):
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Access denied to this consultation.")
+
     return [
         MessageItem(
             id=m.id,
@@ -182,11 +213,18 @@ def get_conversation_messages(conversation_id: str, db: Session = Depends(get_db
 
 
 @router.delete("/conversations/{conversation_id}", summary="Delete a consultation session")
-def delete_conversation(conversation_id: str, db: Session = Depends(get_db)):
+def delete_conversation(
+    conversation_id: str,
+    current_user: Optional[User] = Depends(get_optional_current_user),
+    db: Session = Depends(get_db)
+):
     conv = db.query(Conversation).filter(Conversation.id == conversation_id).first()
     if not conv:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Conversation not found")
-    
+
+    if conv.user_id and (not current_user or conv.user_id != current_user.id):
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Access denied to delete this consultation.")
+
     db.delete(conv)
     db.commit()
     return {"status": "success", "deleted_id": conversation_id}
@@ -201,7 +239,7 @@ def submit_message_feedback(
     msg = db.query(Message).filter(Message.id == message_id).first()
     if not msg:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Message not found")
-    
+
     msg.feedback_rating = req.rating
     msg.feedback_text = req.feedback_text
     db.commit()
